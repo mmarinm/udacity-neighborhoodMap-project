@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      html,
+      body {
+        font-family: Arial, sans-serif;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      .container {
+        height: 100%;
+        position: relative;
+      }
+
+      #map {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+      }
+      #menu{
+        position: absolute;
+        height: 500px;
+        width: 362px;
+        z-index: 1;
+        background-color: white;
+        border: 2px solid;
+      }
+      #hdr{
+        width: 90%;
+        text-align: center;
+      }
+      #top{
+        width: 100%;
+        padding: 1.5% 0;
+        background-color: white;
+        display: flex;
+        flex-wrap: wrap;
+      }
+      #menu-btn{
+        max-width: 10%;
+        cursor: pointer;
+        margin: auto 0;
+      }
+
+      #menu-img{
+        position: absolute;
+        top: 50px;
+        left: 50px;
+        z-index: 1;
+        cursor: pointer;
+      }
+
+      .menu-img{
+        width:30px;
+        height: 30px;
+      }
+
+      .hide{
+        top: -9999px;
+      }
+
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <img class="menu-img" id="menu-img" src="img/hamburger.png">
+      <div id="menu">
+        <div id="top">
+          <h2 id="hdr">Personal Guide to Astoria</h2>
+          <img class="menu-img" id="menu-btn" src="img/hamburger.png">
+          <!-- <div id="menu-btn">&#9776;</div> -->
+        </div>
+        <hr>
+        <input id="search" type="text" name="">
+        <button>Filter</button>
+        <ul>
+          <li>Example Bar</li>
+        </ul>
+      </div>
+      <div id="map"></div>
+    </div>
+    <script async src='js/maps.js'></script>
+    <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA5v_GDkF1Gq0AX4uiTlYGrZN6YTaiRZ4U&callback=initMap"></script>
+    <script src="js/jQuery.js"></script>
+    <script async src='js/animation.js'></script>
+    <script async defer src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.1/knockout-min.js"></script>
+  </body>
+</html>
