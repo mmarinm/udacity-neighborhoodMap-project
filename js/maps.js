@@ -1,11 +1,7 @@
 var map;
-
-// TODO: Complete the following function to initialize the map
-function initMap() {
-// TODO: use a constructor to create a new map JS object. You can use the coordinates
- var pin1 = {lat: 40.7595, lng: -73.9272};
-
- var styles = [
+var service;
+//maps styles
+var styles = [
    {
      featureType: 'water',
      stylers: [
@@ -70,14 +66,51 @@ function initMap() {
        { lightness: -25 }
      ]
    }
- ];
+];
 
- map = new google.maps.Map(document.getElementById('map'), {
-   center: pin1,
-   styles: styles,
-   mapTypeControl: false,
-   zoom: 15
- });
+// initialize the map
+function initMap() {
 
+  //starting position for the maps
+  var pin1 = {lat: 40.7595, lng: -73.9272};
+  map = new google.maps.Map(document.getElementById('map'), {
+    center: pin1,
+    styles: styles,
+    mapTypeControl: false,
+    zoom: 15
+  });
+
+  infowindow = new google.maps.InfoWindow();
+
+  var request = {
+    location: pin1,
+    radius: '500',
+    types: ['restaurant']
+  };
+
+  service =  new google.maps.places.PlacesService(map);
+  service.nearbySearch(request, callback);
 }
 
+
+
+function callback(results, status) {
+  if (status === google.maps.places.PlacesServiceStatus.OK) {
+    for (var i = 0; i < results.length; i++) {
+      createMarker(results[i]);
+    }
+  }
+}
+
+function createMarker(place) {
+  var placeLoc = place.geometry.location;
+  var marker = new google.maps.Marker({
+    map: map,
+    position: place.geometry.location
+  });
+
+  google.maps.event.addListener(marker, 'click', function() {
+    infowindow.setContent(place.name);
+    infowindow.open(map, this);
+  });
+}
