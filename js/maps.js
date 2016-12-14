@@ -105,7 +105,7 @@ var getYelpData = function() {
     var httpMethod = 'GET';
 
     // Yelp API request url
-    var yelpURL = 'http://api.yelp.com/v2/search/';
+    var yelpURL = 'https://api.yelp.com/v2/search/';
 
     // nonce generator
     var nonce = function(length) {
