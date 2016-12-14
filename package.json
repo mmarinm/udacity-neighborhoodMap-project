@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/mmarinm/udacity-neighborhoodMap-project/issues"
   },
-  "homepage": "https://github.com/mmarinm/udacity-neighborhoodMap-project#readme"
+  "homepage": "https://github.com/mmarinm/udacity-neighborhoodMap-project#readme",
+  "dependencies": {
+    "nonce": "^1.0.4"
+  }
 }
