@@ -13,3 +13,5 @@ menuimg.click(function(event) {
     /* Act on the event */
     $(menu).removeClass('hide');
 });
+
+

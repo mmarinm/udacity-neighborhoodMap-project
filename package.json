@@ -1,0 +1,19 @@
+{
+  "name": "neigborhoodmapproject",
+  "version": "1.0.0",
+  "description": "Udacity Front-End Web Developer Nanodegree Project 5",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mmarinm/udacity-neighborhoodMap-project.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mmarinm/udacity-neighborhoodMap-project/issues"
+  },
+  "homepage": "https://github.com/mmarinm/udacity-neighborhoodMap-project#readme"
+}
