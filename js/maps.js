@@ -71,12 +71,12 @@ var styles = [
 function initMap() {
 
   //starting position for the maps
-  var pin1 = {lat: 40.7595, lng: -73.9272};
+  var pin1 = {lat: 40.7634, lng: -73.9190};
   map = new google.maps.Map(document.getElementById('map'), {
     center: pin1,
     styles: styles,
     mapTypeControl: false,
-    zoom: 15
+    zoom: 14
   });
 
   infowindow = new google.maps.InfoWindow();
@@ -91,8 +91,23 @@ function createMarker(place) {
     position: placeLoc
   });
 
+
   google.maps.event.addListener(marker, 'click', function() {
-    infowindow.setContent(place.name);
+    var self = this;
+    setTimeout( function() {self.setAnimation(null); }, 1000);
+    self.setAnimation(google.maps.Animation.BOUNCE);
+    infowindow.setContent(
+      '<div class="gm-style-iw">' +
+      '<div class = "title full-width">' + '<h3>' + place.name + '</h3>' + '</div>' +
+      '<div class ="business-rating"><img src="' + place.rating_img_url_small + '">'+ '<span> (' + place.rating + ')</span></div>' +
+      '<div class = "business-type">' + place.categories[0][0] + '</div>' +
+      '<div class = "address-label">Address:</div>' +
+      '<div class = "business-address">' + place.location.address + ', ' + place.location.postal_code + ' ' + place.location.city + '</div>' +
+      '<div class = "phone-label">Phone: </div>' +
+      '<div class = "business-phone">' + place.phone + '</div>' +
+      '<div class = "business-url"><a href = "' +  place.url + '">' + 'Find out more' + "</a></div>" +
+      '</div>'
+    );
     infowindow.open(map, this);
   });
 }
