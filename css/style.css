@@ -1,0 +1,79 @@
+/*main styles*/
+html,body {
+  font-family: Arial, sans-serif;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+.container {
+  height: 100%;
+  position: relative;
+}
+
+#map {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+}
+#menu{
+  position: absolute;
+  height: 500px;
+  width: 362px;
+  z-index: 1;
+  background-color: white;
+  border: 2px solid;
+}
+#hdr{
+  width: 90%;
+  text-align: center;
+}
+#top{
+  width: 100%;
+  padding: 1.5% 0;
+  background-color: white;
+  display: flex;
+  flex-wrap: wrap;
+}
+#menu-btn{
+  max-width: 10%;
+  cursor: pointer;
+  margin: auto 0;
+}
+
+#menu-img{
+  position: absolute;
+  top: 50px;
+  left: 50px;
+  z-index: 1;
+  cursor: pointer;
+}
+
+.menu-img{
+  width:30px;
+  height: 30px;
+}
+
+.hide{
+  top: -9999px;
+}
+
+/*infowindow styles*/
+.business-rating{
+  margin-top: 5px;
+}
+.business-type{
+  margin-bottom: 10px;
+  font-style: italic;
+}
+.address-label, .business-phone{
+  font-style: italic;
+}
+.business-address, .business-phone{
+  margin-bottom: 5px;
+}
+.business-title{
+  margin-bottom: 1px;
+}
+.label{
+  font-weight: 500;
+}

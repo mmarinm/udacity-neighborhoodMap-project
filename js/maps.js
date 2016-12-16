@@ -67,6 +67,20 @@ var styles = [
    }
 ];
 
+
+// var Businesses = function(data){
+//   this.name = ko.observable(data.name);
+//   this.rating_img = ko.observable(data.rating_img_url_small);
+//   this.rating = ko.observable(data.rating);
+//   this.categorie = ko.observable(data.categories[0][0]);
+//   this.address = ko.observable(data.location.address);
+//   this.postal_code = ko.observable(data.location.postal_code);
+//   this.city = ko.observable(data.location.city);
+//   this.phone = ko.observable(data.phone);
+//   this.url = ko.observable(data.url);
+// }
+
+
 // initialize the map
 function initMap() {
 
@@ -84,7 +98,7 @@ function initMap() {
 }
 
 function createMarker(place) {
-  console.log(place);
+  // console.log(place);
   var placeLoc = new google.maps.LatLng(place.location.coordinate.latitude, place.location.coordinate.longitude);
   var marker = new google.maps.Marker({
     map: map,
@@ -98,12 +112,12 @@ function createMarker(place) {
     self.setAnimation(google.maps.Animation.BOUNCE);
     infowindow.setContent(
       '<div class="gm-style-iw">' +
-      '<div class = "title full-width">' + '<h3>' + place.name + '</h3>' + '</div>' +
+      '<div class = "title full-width">' + '<h3 class = "business-title">' + place.name + '</h3>' + '</div>' +
       '<div class ="business-rating"><img src="' + place.rating_img_url_small + '">'+ '<span> (' + place.rating + ')</span></div>' +
       '<div class = "business-type">' + place.categories[0][0] + '</div>' +
-      '<div class = "address-label">Address:</div>' +
+      '<div class = "address-label label">Address:</div>' +
       '<div class = "business-address">' + place.location.address + ', ' + place.location.postal_code + ' ' + place.location.city + '</div>' +
-      '<div class = "phone-label">Phone: </div>' +
+      '<div class = "phone-label label">Phone: </div>' +
       '<div class = "business-phone">' + place.phone + '</div>' +
       '<div class = "business-url"><a href = "' +  place.url + '">' + 'Find out more' + "</a></div>" +
       '</div>'
@@ -176,4 +190,15 @@ var getYelpData = function() {
     // Send off the ajax request to Yelp
     $.ajax(ajaxSettings);
   };
+
 getYelpData();
+
+// var viewModel = function(){
+//   var self = this;
+
+//   this.bizList = ko.observableArray([]);
+
+//   this.init =
+// }
+
+// ko.applyBindings(new viewModel());
