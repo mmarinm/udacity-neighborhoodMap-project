@@ -16,10 +16,8 @@
         </div>
         <hr>
         <input id="search" placeholder="  Filter Results" type="text" name="">
-        <ul data-bind="foreach: bizList"> <!-- data-bind="foreach: bizList" -->
-          <li class="list-item" data-bind="text: name"></li>  <!-- data-bind="text: name" -->
-<!--           <li> This biznis 1</li>
-          <li> This biznis 1</li> -->
+        <ul data-bind="foreach: bizList">
+          <li class="list-item" data-bind="text: name"></li>
         </ul>
       </div>
       <div class="map" id="map"></div>

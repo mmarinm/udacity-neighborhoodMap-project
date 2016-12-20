@@ -1,4 +1,4 @@
-var arrRestaurants = [];
+var bizList = ko.observableArray([]);
 var map;
 var styles = [
    {
@@ -67,30 +67,32 @@ var styles = [
    }
 ];
 
-function Restaurant(data){
-  this.name = data.name;
-  this.rating_img = data.rating_img_url_small;
-  this.rating = data.rating;
-  this.categorie = data.categories[0][0];
-  this.address = data.location.address;
-  this.postal_code = data.location.postal_code;
-  this.city = data.location.city;
-  this.phone = data.phone;
-  this.url = data.url;
-  this.lat = data.location.coordinate.latitude;
-  this.long = data.location.coordinate.longitude;
-}
+// function Restaurant(data){
+//   this.name = data.name;
+//   this.rating_img = data.rating_img_url_small;
+//   this.rating = data.rating;
+//   this.categorie = data.categories[0][0];
+//   this.address = data.location.address;
+//   this.postal_code = data.location.postal_code;
+//   this.city = data.location.city;
+//   this.phone = data.phone;
+//   this.url = data.url;
+//   this.lat = data.location.coordinate.latitude;
+//   this.long = data.location.coordinate.longitude;
+// }
 
-var RestaurantKo = function(data){
+var Restaurant = function(data){
   this.name = ko.observable(data.name);
-  // this.rating_img = ko.observable(data.rating_img);
-  // this.rating = ko.observable(data.rating);
-  // this.categorie = ko.observable(data.categorie);
-  // this.address = ko.observable(data.address);
-  // this.postal_code = ko.observable(data.postal_code);
-  // this.city = ko.observable(data.city);
-  // this.phone = ko.observable(data.phone);
-  // this.url = ko.observable(data.url);
+  this.rating_img = ko.observable(data.rating_img);
+  this.rating = ko.observable(data.rating);
+  this.categorie = ko.observable(data.categorie);
+  this.address = ko.observable(data.address);
+  this.postal_code = ko.observable(data.postal_code);
+  this.city = ko.observable(data.city);
+  this.phone = ko.observable(data.phone);
+  this.url = ko.observable(data.url);
+  this.lat = ko.observable(data.location.coordinate.latitude);
+  this.long = ko.observable(data.location.coordinate.longitude);
 }
 
 //get data from yelp
@@ -146,10 +148,12 @@ var getYelpData = function() {
     success: function(response) {
       // Update the infoWindow to display the yelp rating image
       response.businesses.forEach(function(biz){
-        //console.log(biz);
-        arrRestaurants.push(new Restaurant(biz));
+        bizList.push(new Restaurant(biz));
       })
-      ko.applyBindings(new viewModel());
+
+      bizList().forEach(function(rest){
+          createMarker(rest);
+      });
     },
     error: function() {
       console.log('Data could not be retrieved from yelp.');
@@ -179,7 +183,7 @@ function initMap() {
 
 function createMarker(place) {
   // console.log(place);
-  var placeLoc = new google.maps.LatLng(place.lat, place.long);
+  var placeLoc = new google.maps.LatLng(place.lat(), place.long());
   var marker = new google.maps.Marker({
     map: map,
     position: placeLoc
@@ -192,14 +196,14 @@ function createMarker(place) {
     self.setAnimation(google.maps.Animation.BOUNCE);
     infowindow.setContent(
       '<div class="gm-style-iw">' +
-      '<div class = "title full-width">' + '<h3 class = "business-title">' + place.name + '</h3>' + '</div>' +
-      '<div class ="business-rating"><img src="' + place.rating_img + '">'+ '<span> (' + place.rating + ')</span></div>' +
-      '<div class = "business-type">' + place.categorie + '</div>' +
+      '<div class = "title full-width">' + '<h3 class = "business-title">' + place.name() + '</h3>' + '</div>' +
+      '<div class ="business-rating"><img src="' + place.rating_img() + '">'+ '<span> (' + place.rating() + ')</span></div>' +
+      '<div class = "business-type">' + place.categorie() + '</div>' +
       '<div class = "address-label label">Address:</div>' +
-      '<div class = "business-address">' + place.address + ', ' + place.postal_code + ' ' + place.city + '</div>' +
+      '<div class = "business-address">' + place.address() + ', ' + place.postal_code() + ' ' + place.city() + '</div>' +
       '<div class = "phone-label label">Phone: </div>' +
-      '<div class = "business-phone">' + place.phone + '</div>' +
-      '<div class = "business-url"><a href = "' +  place.url + '">' + 'Find out more' + "</a></div>" +
+      '<div class = "business-phone">' + place.phone() + '</div>' +
+      '<div class = "business-url"><a href = "' +  place.url() + '">' + 'Find out more' + "</a></div>" +
       '</div>'
     );
     infowindow.open(map, this);
@@ -228,14 +232,6 @@ var visualEffects = function(){
 var viewModel = function(){
   visualEffects();
   var self = this;
-
-  this.bizList = ko.observableArray([]);
-  arrRestaurants.forEach(function(biz){
-      self.bizList.push(new RestaurantKo(biz));
-  });
-
-  arrRestaurants.forEach(function(rest){
-    createMarker(rest);
-  })
 }
 
+ ko.applyBindings(new viewModel());
