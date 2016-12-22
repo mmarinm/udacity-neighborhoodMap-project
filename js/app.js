@@ -83,16 +83,17 @@ var styles = [
 
 var Restaurant = function(data){
   this.name = ko.observable(data.name);
-  this.rating_img = ko.observable(data.rating_img);
+  this.rating_img = ko.observable(data.rating_img_url_small);
   this.rating = ko.observable(data.rating);
-  this.categorie = ko.observable(data.categorie);
-  this.address = ko.observable(data.address);
-  this.postal_code = ko.observable(data.postal_code);
-  this.city = ko.observable(data.city);
+  this.categorie = ko.observable(data.categories[0][0]);
+  this.address = ko.observable(data.location.address);
+  this.postal_code = ko.observable(data.location.postal_code);
+  this.city = ko.observable(data.location.city);
   this.phone = ko.observable(data.phone);
   this.url = ko.observable(data.url);
   this.lat = ko.observable(data.location.coordinate.latitude);
   this.long = ko.observable(data.location.coordinate.longitude);
+  this.marker = ko.observable(createMarker(this));
 }
 
 //get data from yelp
@@ -150,10 +151,6 @@ var getYelpData = function() {
       response.businesses.forEach(function(biz){
         bizList.push(new Restaurant(biz));
       })
-
-      bizList().forEach(function(rest){
-          createMarker(rest);
-      });
     },
     error: function() {
       console.log('Data could not be retrieved from yelp.');
@@ -182,13 +179,11 @@ function initMap() {
 }
 
 function createMarker(place) {
-  // console.log(place);
   var placeLoc = new google.maps.LatLng(place.lat(), place.long());
   var marker = new google.maps.Marker({
     map: map,
     position: placeLoc
   });
-
   //add event listener that crates animation and infowidow on clik
   google.maps.event.addListener(marker, 'click', function() {
     var self = this;
@@ -196,7 +191,7 @@ function createMarker(place) {
     self.setAnimation(google.maps.Animation.BOUNCE);
     infowindow.setContent(
       '<div class="gm-style-iw">' +
-      '<div class = "title full-width">' + '<h3 class = "business-title">' + place.name() + '</h3>' + '</div>' +
+      '<div class = "title full-width">' + '<h3 class = "business-title" data-bind="text: name">' + place.name() +'</h3>' + '</div>' +
       '<div class ="business-rating"><img src="' + place.rating_img() + '">'+ '<span> (' + place.rating() + ')</span></div>' +
       '<div class = "business-type">' + place.categorie() + '</div>' +
       '<div class = "address-label label">Address:</div>' +
@@ -208,7 +203,11 @@ function createMarker(place) {
     );
     infowindow.open(map, this);
   });
+
+  return marker;
 }
+
+
 
 var visualEffects = function(){
     var menu = $('#menu');
@@ -232,6 +231,28 @@ var visualEffects = function(){
 var viewModel = function(){
   visualEffects();
   var self = this;
+
+  self.currentFilter = ko.observable(''); // property to store the filter
+
+  self.filterMarkers = ko.computed(function () {
+      if (!self.currentFilter()) {
+        bizList().forEach(function(biz){
+          biz.marker().setVisible(true);
+        })
+        return bizList();
+      } else {
+          return ko.utils.arrayFilter(bizList(), function (biz) {
+            // console.log(self.currentFilter().toLowerCase());
+            // console.log(biz.name().toLowerCase());biz.marker().setVisible(false);
+            biz.marker().setVisible(false);
+            if(biz.name().toLowerCase().search(self.currentFilter().toLowerCase()) >= 0){
+              biz.marker().setVisible(true);
+              return true
+            }
+          });
+      }
+  });
+
 }
 
  ko.applyBindings(new viewModel());

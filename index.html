@@ -15,9 +15,9 @@
           <img class="menu-img menu-btn" id="menu-btn" src="img/hamburger.png">
         </div>
         <hr>
-        <input id="search" placeholder="  Filter Results" type="text" name="">
-        <ul data-bind="foreach: bizList">
-          <li class="list-item" data-bind="text: name"></li>
+        <input id="search" data-bind="value: currentFilter, valueUpdate: 'keyup'" placeholder="  Filter Results" type="text" name="">
+        <ul data-bind="foreach: filterMarkers">
+          <li class="list-item" data-bind="text: name, click: function(){infowindow.open(map, this.marker())}"></li>
         </ul>
       </div>
       <div class="map" id="map"></div>
