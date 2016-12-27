@@ -1,5 +1,7 @@
+'use strict';
 var bizList = ko.observableArray([]);
 var map;
+var infowindow;
 var styles = [
    {
      featureType: 'water',
@@ -66,20 +68,6 @@ var styles = [
      ]
    }
 ];
-
-// function Restaurant(data){
-//   this.name = data.name;
-//   this.rating_img = data.rating_img_url_small;
-//   this.rating = data.rating;
-//   this.categorie = data.categories[0][0];
-//   this.address = data.location.address;
-//   this.postal_code = data.location.postal_code;
-//   this.city = data.location.city;
-//   this.phone = data.phone;
-//   this.url = data.url;
-//   this.lat = data.location.coordinate.latitude;
-//   this.long = data.location.coordinate.longitude;
-// }
 
 var Restaurant = function(data){
   this.name = ko.observable(data.name);
@@ -191,7 +179,7 @@ function createMarker(place) {
     self.setAnimation(google.maps.Animation.BOUNCE);
     infowindow.setContent(
       '<div class="gm-style-iw">' +
-      '<div class = "title full-width">' + '<h3 class = "business-title" data-bind="text: name">' + place.name() +'</h3>' + '</div>' +
+      '<div class = "title full-width">' + '<h3 class = "business-title">' + place.name() +'</h3>' + '</div>' +
       '<div class ="business-rating"><img src="' + place.rating_img() + '">'+ '<span> (' + place.rating() + ')</span></div>' +
       '<div class = "business-type">' + place.categorie() + '</div>' +
       '<div class = "address-label label">Address:</div>' +
@@ -207,24 +195,6 @@ function createMarker(place) {
   );
 
   return marker;
-}
-
-var displayInfoWindow = function(marker, biz) {
-  setTimeout( function() {marker.setAnimation(null); }, 1000);
-  marker.setAnimation(google.maps.Animation.BOUNCE);
-  infowindow.setContent(
-    '<div class="gm-style-iw">' +
-    '<div class = "title full-width">' + '<h3 class = "business-title" data-bind="text: name">' + biz.name() +'</h3>' + '</div>' +
-    '<div class ="business-rating"><img src="' + biz.rating_img() + '">'+ '<span> (' + biz.rating() + ')</span></div>' +
-    '<div class = "business-type">' + biz.categorie() + '</div>' +
-    '<div class = "address-label label">Address:</div>' +
-    '<div class = "business-address">' + biz.address() + ', ' + biz.postal_code() + ' ' + biz.city() + '</div>' +
-    '<div class = "phone-label label">Phone: </div>' +
-    '<div class = "business-phone">' + biz.phone() + '</div>' +
-    '<div class = "business-url"><a href = "' +  biz.url() + '">' + 'Find out more' + "</a></div>" +
-    '</div>'
-  );
-  infowindow.open(map, marker);
 }
 
 var visualEffects = function(){
@@ -252,9 +222,24 @@ var viewModel = function(){
 
   self.currentFilter = ko.observable(''); // property to store the filter
 
-  self.displayInfoWindow = ko.computed(function() {
-
-  })
+  self.displayInfoWindow = function(){
+    var currMarker = this.marker();
+    setTimeout( function() {currMarker.setAnimation(null); }, 1000);
+    currMarker.setAnimation(google.maps.Animation.BOUNCE);
+    infowindow.setContent(
+      '<div class="gm-style-iw">' +
+      '<div class = "title full-width">' + '<h3 class = "business-title">' + this.name() + '</h3>' + '</div>' +
+      '<div class ="business-rating"><img src="' + this.rating_img() + '">'+ '<span> (' + this.rating() + ')</span></div>' +
+      '<div class = "business-type">' + this.categorie() + '</div>' +
+      '<div class = "address-label label">Address:</div>' +
+      '<div class = "business-address">' + this.address() + ', ' + this.postal_code() + ' ' + this.city() + '</div>' +
+      '<div class = "phone-label label">Phone: </div>' +
+      '<div class = "business-phone">' + this.phone() + '</div>' +
+      '<div class = "business-url"><a href = "' +  this.url() + '">' + 'Find out more' + "</a></div>" +
+      '</div>'
+    );
+    infowindow.open(map, currMarker);
+  }
 
   self.filterMarkers = ko.computed(function () {
       if (!self.currentFilter()) {
@@ -264,8 +249,6 @@ var viewModel = function(){
         return bizList();
       } else {
           return ko.utils.arrayFilter(bizList(), function (biz) {
-            // console.log(self.currentFilter().toLowerCase());
-            // console.log(biz.name().toLowerCase());biz.marker().setVisible(false);
             biz.marker().setVisible(false);
             if(biz.name().toLowerCase().search(self.currentFilter().toLowerCase()) >= 0){
               biz.marker().setVisible(true);
@@ -274,7 +257,6 @@ var viewModel = function(){
           });
       }
   });
-
 }
 
  ko.applyBindings(new viewModel());

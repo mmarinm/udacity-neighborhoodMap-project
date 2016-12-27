@@ -17,7 +17,7 @@
         <hr>
         <input id="search" data-bind="value: currentFilter, valueUpdate: 'keyup'" placeholder="  Filter Results" type="text" name="">
         <ul data-bind="foreach: filterMarkers">
-          <li class="list-item" data-bind="text: name, click: function(){displayInfoWindow(this.marker(), this);}"></li>
+          <li class="list-item" data-bind="text: name, click: $parent.displayInfoWindow"></li>
         </ul>
       </div>
       <div class="map" id="map"></div>
