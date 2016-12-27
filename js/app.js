@@ -1,4 +1,5 @@
 'use strict';
+
 var bizList = ko.observableArray([]);
 var map;
 var infowindow;
@@ -82,7 +83,7 @@ var Restaurant = function(data){
   this.lat = ko.observable(data.location.coordinate.latitude);
   this.long = ko.observable(data.location.coordinate.longitude);
   this.marker = ko.observable(createMarker(this));
-}
+};
 
 //get data from yelp
 var getYelpData = function() {
@@ -138,10 +139,10 @@ var getYelpData = function() {
       // Update the infoWindow to display the yelp rating image
       response.businesses.forEach(function(biz){
         bizList.push(new Restaurant(biz));
-      })
+      });
     },
     error: function() {
-      console.log('Data could not be retrieved from yelp.');
+      alert('Data could not be retrieved from yelp.');
     }
   };
 
@@ -152,7 +153,7 @@ var getYelpData = function() {
 
 // initialize the map
 function initMap() {
-  getYelpData()
+  getYelpData();
   //starting position for the maps
   var pin1 = {lat: 40.7634, lng: -73.9190};
   map = new google.maps.Map(document.getElementById('map'), {
@@ -213,7 +214,7 @@ var visualEffects = function(){
         /* Act on the event */
         $(menu).removeClass('hide');
     });
-}
+};
 
 
 var viewModel = function(){
@@ -239,24 +240,28 @@ var viewModel = function(){
       '</div>'
     );
     infowindow.open(map, currMarker);
-  }
+  };
 
   self.filterMarkers = ko.computed(function () {
       if (!self.currentFilter()) {
         bizList().forEach(function(biz){
           biz.marker().setVisible(true);
-        })
+        });
         return bizList();
       } else {
           return ko.utils.arrayFilter(bizList(), function (biz) {
             biz.marker().setVisible(false);
             if(biz.name().toLowerCase().search(self.currentFilter().toLowerCase()) >= 0){
               biz.marker().setVisible(true);
-              return true
+              return true;
             }
           });
       }
   });
-}
+};
 
  ko.applyBindings(new viewModel());
+
+google.maps.event.addDomListener(window, 'load', function() {
+  initMap();
+});
