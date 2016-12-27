@@ -14,7 +14,10 @@ The objective is to build Neighborhood map using Google maps API and Knockout.js
 
 ## Using the app
 ### Filter results
-Filter results by the name in serach box search is trigerd on the keyup event, to
+Filter results by the name in the serach box, search is triggered on the keyup event.
 
 ### Get more info
-To get more informations about the restaurant click on it is name on the list or select the marker on the map. 
+To get more informations about the restaurant click on it's name on the list or select the marker on the map. 
+
+### Expend the map
+To expend the map on full screen click the hamburger icon
