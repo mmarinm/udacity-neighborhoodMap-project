@@ -17,7 +17,7 @@ html,body {
 }
 .menu{
   position: absolute;
-  width: 362px;
+  width: 260px;
   height: 100%;
   z-index: 1;
   background-color: white;
@@ -60,13 +60,12 @@ html,body {
 }
 
 input {
-  margin-left: 31px;
-  margin-top: 12px;
+  margin: 12px 5px 5px 5px;
   padding:5px 0;
   border:1px solid #d5d9da;
   border-radius:5px;
   box-shadow: 0 0 5px #e8e9eb inset;
-  width:300px;
+  width:240px;
   font-size:1em;
   outline:0; /* remove webkit focus styles */
 }
@@ -123,16 +122,13 @@ li:hover{
   font-weight: 500;
 }
 
-/* Portrait */
 @media only screen
-  and (min-device-width: 320px)
-  and (max-device-width: 480px)
-  and (-webkit-min-device-pixel-ratio: 2)
-  and (orientation: portrait) {
+  and (min-width: 480px) {
   .menu {
-    max-width: 260px;
+    width: 362px;
   }
   input{
-    margin: 5px;
+    width: 346px;
   }
 }
+
