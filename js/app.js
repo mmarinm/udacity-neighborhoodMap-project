@@ -70,6 +70,7 @@ var styles = [
    }
 ];
 
+// constructor function
 var Restaurant = function(data){
   this.name = ko.observable(data.name);
   this.rating_img = ko.observable(data.rating_img_url_small);
@@ -145,7 +146,6 @@ var getYelpData = function() {
       alert('Data could not be retrieved from yelp.');
     }
   };
-
   // Send off the ajax request to Yelp
   $.ajax(ajaxSettings);
 };
@@ -154,7 +154,7 @@ var getYelpData = function() {
 // initialize the map
 function initMap() {
   getYelpData();
-  //starting position for the maps
+  //starting position for the map
   var pin1 = {lat: 40.7634, lng: -73.9190};
   map = new google.maps.Map(document.getElementById('map'), {
     center: pin1,
@@ -162,9 +162,7 @@ function initMap() {
     mapTypeControl: false,
     zoom: 14
   });
-
   infowindow = new google.maps.InfoWindow();
-
 }
 
 function createMarker(place) {
@@ -173,79 +171,56 @@ function createMarker(place) {
     map: map,
     position: placeLoc
   });
-  // add event listener that crates animation and infowidow on clik
-  google.maps.event.addListener(marker,'click', function() {
-    var self = this;
-    setTimeout( function() {self.setAnimation(null); }, 1000);
-    self.setAnimation(google.maps.Animation.BOUNCE);
-    infowindow.setContent(
-      '<div class="gm-style-iw">' +
-      '<div class = "title full-width">' + '<h3 class = "business-title">' + place.name() +'</h3>' + '</div>' +
-      '<div class ="business-rating"><img src="' + place.rating_img() + '">'+ '<span> (' + place.rating() + ')</span></div>' +
-      '<div class = "business-type">' + place.categorie() + '</div>' +
-      '<div class = "address-label label">Address:</div>' +
-      '<div class = "business-address">' + place.address() + ', ' + place.postal_code() + ' ' + place.city() + '</div>' +
-      '<div class = "phone-label label">Phone: </div>' +
-      '<div class = "business-phone">' + place.phone() + '</div>' +
-      '<div class = "business-url"><a href = "' +  place.url() + '">' + 'Find out more' + "</a></div>" +
-      '</div>'
-    );
-    infowindow.open(map, this);
-  }
-
-  );
-
   return marker;
 }
 
-var visualEffects = function(){
-    var menu = $('#menu');
-    var menubtn = $('#menu-btn');
-    var menuimg = $('#menu-img');
-
-
-
-    menubtn.click(function(event) {
-        /* Act on the event */
-        $(menu).addClass('hide');
-    });
-
-    menuimg.click(function(event) {
-        /* Act on the event */
-        $(menu).removeClass('hide');
-    });
-};
-
-
 var viewModel = function(){
-  visualEffects();
   var self = this;
+  //store filtering query
+  self.currentFilter = ko.observable('');
+  self.menuIsVisible = ko.observable(false);
 
-  self.currentFilter = ko.observable(''); // property to store the filter
-
-  self.displayInfoWindow = function(){
-    var currMarker = this.marker();
-    setTimeout( function() {currMarker.setAnimation(null); }, 1000);
-    currMarker.setAnimation(google.maps.Animation.BOUNCE);
+// this function takes care of opening info windows
+  self.showInfo = function (placeItem) {
+    //populate the info window with ajax data
     infowindow.setContent(
       '<div class="gm-style-iw">' +
-      '<div class = "title full-width">' + '<h3 class = "business-title">' + this.name() + '</h3>' + '</div>' +
-      '<div class ="business-rating"><img src="' + this.rating_img() + '">'+ '<span> (' + this.rating() + ')</span></div>' +
-      '<div class = "business-type">' + this.categorie() + '</div>' +
+      '<div class = "title full-width">' + '<h3 class = "business-title">' + placeItem.name() + '</h3>' + '</div>' +
+      '<div class ="business-rating"><img src="' + placeItem.rating_img() + '">'+ '<span> (' + placeItem.rating() + ')</span></div>' +
+      '<div class = "business-type">' + placeItem.categorie() + '</div>' +
       '<div class = "address-label label">Address:</div>' +
-      '<div class = "business-address">' + this.address() + ', ' + this.postal_code() + ' ' + this.city() + '</div>' +
+      '<div class = "business-address">' + placeItem.address() + ', ' + placeItem.postal_code() + ' ' + placeItem.city() + '</div>' +
       '<div class = "phone-label label">Phone: </div>' +
-      '<div class = "business-phone">' + this.phone() + '</div>' +
-      '<div class = "business-url"><a href = "' +  this.url() + '">' + 'Find out more' + "</a></div>" +
+      '<div class = "business-phone">' + placeItem.phone() + '</div>' +
+      '<div class = "business-url"><a target="_blank" href = "' +  placeItem.url() + '">' + 'Find out more' + "</a></div>" +
       '</div>'
     );
-    infowindow.open(map, currMarker);
-  };
+
+    //open ifo window
+    infowindow.open(map, placeItem.marker());
+
+    //bounce marker
+    setTimeout( function() {placeItem.marker().setAnimation(null); }, 1000);
+    placeItem.marker().setAnimation(google.maps.Animation.BOUNCE);
+
+  }
+
+  self.hideMenu = function(){
+    if(self.menuIsVisible() === false){
+      self.menuIsVisible(true);
+    } else{
+      self.menuIsVisible(false);
+    }
+  }
 
   self.filterMarkers = ko.computed(function () {
       if (!self.currentFilter()) {
         bizList().forEach(function(biz){
           biz.marker().setVisible(true);
+          //attach click events on each marker
+          google.maps.event.addListener(biz.marker(),'click', function() {
+            self.showInfo(biz);
+          })
         });
         return bizList();
       } else {
@@ -261,7 +236,3 @@ var viewModel = function(){
 };
 
  ko.applyBindings(new viewModel());
-
-google.maps.event.addDomListener(window, 'load', function() {
-  initMap();
-});

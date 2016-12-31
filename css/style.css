@@ -23,6 +23,7 @@ html,body {
   background-color: white;
   border: 2px solid;
   overflow: auto;
+  box-sizing: border-box;
 }
 .hdr{
   width: 90%;
@@ -79,7 +80,7 @@ input:focus {
 
 ul{
   list-style: none;
-  margin: 20px;
+  margin: 20px 0;
   padding: 0;
 }
 
@@ -88,10 +89,16 @@ li:first-child {
   padding-top: 17px;
 }
 li{
-  margin: 0;
-  padding: 18px 0;
+  margin: 0 auto;
+  padding: 18px;
   border-bottom: 1px solid #e6e6e6;
   padding-bottom: 17px;
+  cursor: pointer;
+}
+
+li:hover{
+  background-color: #7d8c89;
+  color: white;
 }
 
 
@@ -114,4 +121,18 @@ li{
 }
 .label{
   font-weight: 500;
+}
+
+/* Portrait */
+@media only screen
+  and (min-device-width: 320px)
+  and (max-device-width: 480px)
+  and (-webkit-min-device-pixel-ratio: 2)
+  and (orientation: portrait) {
+  .menu {
+    max-width: 260px;
+  }
+  input{
+    margin: 5px;
+  }
 }
