@@ -41,7 +41,7 @@ gulp.task('minify-css', function() {
           console.log(details.name + ': ' + details.stats.originalSize);
           console.log(details.name + ': ' + details.stats.minifiedSize);
     }))
-    .pipe(gulp.dest('dist/'));
+    .pipe(gulp.dest('css/'));
 });
 
 

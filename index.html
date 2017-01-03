@@ -9,7 +9,7 @@
     <body>
       <div class="container">
         <img alt='hamburger menu' data-bind='click: hideMenu' class="menu-img menu-img-min" id="menu-img" src="img/hamburger.png">
-        <div class="menu" id="menu"  data-bind='css: { "hide": menuIsVisible() == true }' >
+        <aside class="menu" id="menu"  data-bind='css: { "hide": menuIsVisible() == true }' >
           <div id="top">
             <h2 class="hdr">Hungry in Astoria?</h2>
             <img alt='hamburger menu' data-bind='click: hideMenu'  class="menu-img menu-btn"  src="img/hamburger.png">
@@ -19,8 +19,8 @@
           <ul data-bind="foreach: filterMarkers">
             <li class="list-item" data-bind="text: name, click: function() { $parent.hideMenu() , $parent.showInfo(this) }"></li>
           </ul>
-        </div>
-        <div class="map" id="map"></div>
+        </aside>
+        <main class="map" id="map"></main>
       </div>
       <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.1/knockout-min.js"></script>
@@ -31,7 +31,7 @@
             alert("There is a problem with Google Maps")
         }
       </script>
+      <script src='js/app-min.js'></script>
       <script  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA5v_GDkF1Gq0AX4uiTlYGrZN6YTaiRZ4U&callback=initMap" onerror="googleError()" async defer></script>
-      <script src='dist/app.js'></script>
     </body>
 </html>
