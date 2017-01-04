@@ -73,17 +73,17 @@ var styles = [
 // constructor function
 var Restaurant = function(data){
   this.name = ko.observable(data.name);
-  this.rating_img = ko.observable(data.rating_img_url_small);
-  this.rating = ko.observable(data.rating);
-  this.categorie = ko.observable(data.categories[0][0]);
-  this.address = ko.observable(data.location.address);
-  this.postal_code = ko.observable(data.location.postal_code);
-  this.city = ko.observable(data.location.city);
-  this.phone = ko.observable(data.phone);
-  this.url = ko.observable(data.url);
-  this.lat = ko.observable(data.location.coordinate.latitude);
-  this.long = ko.observable(data.location.coordinate.longitude);
-  this.marker = ko.observable(createMarker(this));
+  this.rating_img = data.rating_img_url_small;
+  this.rating = data.rating;
+  this.categorie = data.categories[0][0];
+  this.address = data.location.address;
+  this.postal_code = data.location.postal_code;
+  this.city = data.location.city;
+  this.phone = data.phone;
+  this.url = data.url;
+  this.lat = data.location.coordinate.latitude;
+  this.long = data.location.coordinate.longitude;
+  this.marker = createMarker(this);
 };
 
 //get data from yelp
@@ -166,7 +166,7 @@ function initMap() {
 }
 
 function createMarker(place) {
-  var placeLoc = new google.maps.LatLng(place.lat(), place.long());
+  var placeLoc = new google.maps.LatLng(place.lat, place.long);
   var marker = new google.maps.Marker({
     map: map,
     position: placeLoc
@@ -186,22 +186,22 @@ var viewModel = function(){
     infowindow.setContent(
       '<div class="gm-style-iw">' +
       '<div class = "title full-width">' + '<h3 class = "business-title">' + placeItem.name() + '</h3>' + '</div>' +
-      '<div class ="business-rating"><img src="' + placeItem.rating_img() + '">'+ '<span> (' + placeItem.rating() + ')</span></div>' +
-      '<div class = "business-type">' + placeItem.categorie() + '</div>' +
+      '<div class ="business-rating"><img src="' + placeItem.rating_img + '">'+ '<span> (' + placeItem.rating + ')</span></div>' +
+      '<div class = "business-type">' + placeItem.categorie + '</div>' +
       '<div class = "address-label label">Address:</div>' +
-      '<div class = "business-address">' + placeItem.address() + ', ' + placeItem.postal_code() + ' ' + placeItem.city() + '</div>' +
+      '<div class = "business-address">' + placeItem.address + ', ' + placeItem.postal_code + ' ' + placeItem.city + '</div>' +
       '<div class = "phone-label label">Phone: </div>' +
-      '<div class = "business-phone">' + placeItem.phone() + '</div>' +
-      '<div class = "business-url"><a target="_blank" href = "' +  placeItem.url() + '">' + 'Find out more' + "</a></div>" +
+      '<div class = "business-phone">' + placeItem.phone + '</div>' +
+      '<div class = "business-url"><a target="_blank" href = "' +  placeItem.url + '">' + 'Find out more' + "</a></div>" +
       '</div>'
     );
 
     //open ifo window
-    infowindow.open(map, placeItem.marker());
+    infowindow.open(map, placeItem.marker);
 
     //bounce marker
-    setTimeout( function() {placeItem.marker().setAnimation(null); }, 1000);
-    placeItem.marker().setAnimation(google.maps.Animation.BOUNCE);
+    setTimeout( function() {placeItem.marker.setAnimation(null); }, 1000);
+    placeItem.marker.setAnimation(google.maps.Animation.BOUNCE);
 
   };
 
@@ -216,18 +216,18 @@ var viewModel = function(){
   self.filterMarkers = ko.computed(function () {
       if (!self.currentFilter()) {
         bizList().forEach(function(biz){
-          biz.marker().setVisible(true);
+          biz.marker.setVisible(true);
           //attach click events on each marker
-          google.maps.event.addListener(biz.marker(),'click', function() {
+          google.maps.event.addListener(biz.marker,'click', function() {
             self.showInfo(biz);
           });
         });
         return bizList();
       } else {
           return ko.utils.arrayFilter(bizList(), function (biz) {
-            biz.marker().setVisible(false);
+            biz.marker.setVisible(false);
             if(biz.name().toLowerCase().search(self.currentFilter().toLowerCase()) >= 0){
-              biz.marker().setVisible(true);
+              biz.marker.setVisible(true);
               return true;
             }
           });
